@@ -12,12 +12,16 @@ router.route('/').get(async (req, res) => {
 });
 
 router.route('/:id').get(async (req, res) => {
-  const users = await usersService.getAll();
+  const user = await usersService.getUser(req.params.id);
 
-  // res.statusCode = 202;
-  // res.setHeader('Content-Type', 'application/json');
-  // map user fields to exclude secret fields like "password"
-  res.json(User.toResponse(users[1]));
+  if (!user) {
+    res.statusCode = 404;
+    res.json({});
+  } else {
+    // res.setHeader('Content-Type', 'application/json');
+    // map user fields to exclude secret fields like "password"
+    res.json(User.toResponse(user));
+  }
 });
 
 module.exports = router;

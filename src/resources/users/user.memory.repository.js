@@ -1,17 +1,37 @@
 const User = require('./user.model');
-const users = [];
-
-users.push(new User({ name: 'John', login: 'john', password: '123qwe' }));
-users.push(new User({ name: 'Ann', login: 'anna', password: 'secret' }));
-users.push(new User({ name: 'Isaac', login: 'newton', password: 'apple' }));
+let users = [];
 
 const getAll = async () => {
   // TODO: mock implementation. should be replaced during task development
   return users;
 };
 
-const getUser = id => {
-  return users.find(user => user.id === id);
+const getUser = async id => {
+  return await users.find(user => user.id === id);
 };
 
-module.exports = { getAll, getUser };
+const addUser = async (name, login, password) => {
+  const user = await new User({ name, login, password });
+
+  await users.push(user);
+
+  return user;
+};
+
+const updateUser = async (id, name, login, password) => {
+  const i = users.findIndex(user => user.id === id);
+
+  if (name) users[i].name = name;
+  if (login) users[i].login = login;
+  if (password) users[i].password = password;
+
+  return users[i];
+};
+
+const deleteUser = async id => {
+  users = users.filter(user => user.id !== id);
+
+  return users;
+};
+
+module.exports = { getAll, getUser, addUser, updateUser, deleteUser };

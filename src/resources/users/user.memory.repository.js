@@ -1,8 +1,8 @@
 const User = require('./user.model');
+const tasksService = require('../tasks/task.service');
 let users = [];
 
 const getAll = async () => {
-  // TODO: mock implementation. should be replaced during task development
   return users;
 };
 
@@ -30,6 +30,8 @@ const updateUser = async (id, name, login, password) => {
 
 const deleteUser = async id => {
   users = users.filter(user => user.id !== id);
+
+  tasksService.unassignUserTasks(id);
 
   return users;
 };

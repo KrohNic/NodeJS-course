@@ -2,9 +2,12 @@ const Task = require('./task.model');
 let tasks = [];
 
 const getAll = async boardId => {
-  if (boardId) return tasks.filter(task => task.boardId === boardId);
+  const promise = new Promise(resolve => {
+    if (boardId) resolve(tasks.filter(task => task.boardId === boardId));
+    resolve(tasks);
+  });
 
-  return tasks;
+  return await promise;
 };
 
 const add = async (title, order, description, userId, boardId, columnId) => {
@@ -60,13 +63,17 @@ const removeBoardTasks = async boardId => {
 };
 
 const unassignUserTasks = async userId => {
-  tasks = tasks.map(task => {
-    if (task.userId === userId) task.userId = null;
+  const promise = new Promise(resolve => {
+    tasks = tasks.map(task => {
+      if (task.userId === userId) task.userId = null;
 
-    return task;
+      return task;
+    });
+
+    resolve(tasks);
   });
 
-  return tasks;
+  return await promise;
 };
 
 module.exports = {

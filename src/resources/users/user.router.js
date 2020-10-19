@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const User = require('./user.model');
 const usersService = require('./user.service');
-const tasksService = require('../tasks/task.service');
 
 router
   .route('/')
@@ -54,10 +53,7 @@ router
       .json(user);
   })
   .delete(async (req, res) => {
-    const userId = req.params.id;
-    const users = await usersService.deleteUser(userId);
-
-    tasksService.unassignUserTasks(userId);
+    const users = await usersService.deleteUser(req.params.id);
 
     res.json(users.map(User.toResponse));
   });

@@ -1,11 +1,10 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const taskService = require('./task.service');
-let boardId;
 
 router
   .route('/')
   .get(async (req, res) => {
-    const tasks = await taskService.getAll(boardId);
+    const tasks = await taskService.getAll(req.params.boardId);
 
     res.json(tasks);
   })
@@ -15,7 +14,7 @@ router
       req.body.order,
       req.body.description,
       req.body.userId,
-      boardId,
+      req.params.boardId,
       req.body.columnId
     );
 
@@ -50,7 +49,7 @@ router
       req.body.order,
       req.body.description,
       req.body.userId,
-      boardId,
+      req.params.boardId,
       req.body.columnId
     );
 
@@ -66,7 +65,4 @@ router
     res.json(tasks);
   });
 
-module.exports = (board, req, res, next) => {
-  boardId = board;
-  router(req, res, next);
-};
+module.exports = router;

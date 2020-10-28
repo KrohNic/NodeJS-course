@@ -11,34 +11,13 @@ const {
   catchUncaughtException,
   catchUnhandledRejection
 } = require('./common/errorHandler');
-const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
-async function connectToDB() {
-  try {
-    await mongoose.connect(process.env.DB_HOST, {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useUnifiedTopology: true
-    });
-  } catch (e) {
-    console.error('db connection error: ', e);
-  }
-}
-
 process.on('uncaughtException', catchUncaughtException);
 process.on('unhandledRejection', catchUnhandledRejection);
-
-connectToDB();
-
-const db = mongoose.connection;
-db.once('open', () => {
-  console.log('db connected');
-  db.dropDatabase();
-});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const boardService = require('./board.service');
 const { errorsCatcher } = require('../../common/errorHandler');
+const validator = require('../../common/validator');
+const schemas = require('../../common/schemas');
+const Board = require('./board.model');
 
 router
   .route('/')
@@ -11,22 +14,23 @@ router
       res
         .status(200)
         .type('json')
-        .json(boards);
+        .json(boards.map(Board.toResponse));
     })
   )
   .post(
+    validator('body', schemas.board),
     errorsCatcher(async (req, res) => {
       const board = await boardService.add(req.body);
 
       res
         .status(200)
         .type('json')
-        .json(board);
+        .json(Board.toResponse(board));
     })
   );
 
 router
-  .route('/:boardId')
+  .route('/:boardId', validator('params', schemas.boardId))
   .get(
     errorsCatcher(async (req, res) => {
       const board = await boardService.getById(req.params.boardId);
@@ -35,7 +39,7 @@ router
         res
           .status(200)
           .type('json')
-          .json(board);
+          .json(Board.toResponse(board));
       } else {
         res
           .status(404)
@@ -45,13 +49,14 @@ router
     })
   )
   .put(
+    validator('body', schemas.board),
     errorsCatcher(async (req, res) => {
       const board = await boardService.update(req.params.boardId, req.body);
 
       res
         .status(200)
         .type('json')
-        .json(board);
+        .json(Board.toResponse(board));
     })
   )
   .delete(

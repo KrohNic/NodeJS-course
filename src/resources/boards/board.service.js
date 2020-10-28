@@ -13,14 +13,14 @@ const update = (boardId, dto) => {
 
   return board;
 };
-const remove = boardId => {
-  const isFounded = boardsRepo.remove(boardId);
+const remove = async boardId => {
+  const isFounded = await boardsRepo.remove(boardId);
 
   if (!isFounded) {
     throw new Error(`Deletion failed. Board ${boardId} not found. `);
   }
 
-  tasksService.removeBoardsTasks(boardId);
+  await tasksService.removeBoardsTasks(boardId);
 };
 
 module.exports = { getAll, getById, add, update, remove };

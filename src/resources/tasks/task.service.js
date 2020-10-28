@@ -2,7 +2,7 @@ const tasksRepo = require('./task.db.repository');
 
 const getAll = boardId => tasksRepo.getAll(boardId);
 const add = (boardId, dto) => tasksRepo.add({ ...dto, boardId });
-const getById = taskId => tasksRepo.getById(taskId);
+const getById = (taskId, boardId) => tasksRepo.getById(taskId, boardId);
 const update = (taskId, boardId, dto) => {
   const task = tasksRepo.update(taskId, { ...dto, boardId });
 
@@ -10,8 +10,8 @@ const update = (taskId, boardId, dto) => {
 
   return task;
 };
-const remove = taskId => {
-  const isFounded = tasksRepo.remove(taskId);
+const remove = async (taskId, boardId) => {
+  const isFounded = await tasksRepo.remove(taskId, boardId);
 
   if (!isFounded) {
     throw new Error(`Deletion failed. Task ${taskId} not found. `);

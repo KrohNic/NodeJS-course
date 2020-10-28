@@ -2,6 +2,8 @@ const router = require('express').Router();
 const User = require('./user.model');
 const usersService = require('./user.service');
 const { errorsCatcher } = require('../../common/errorHandler');
+const validator = require('../../common/validator');
+const schemas = require('../../common/schemas');
 
 router
   .route('/')
@@ -16,18 +18,19 @@ router
     })
   )
   .post(
+    validator('body', schemas.user),
     errorsCatcher(async (req, res) => {
-      const user = await usersService.addUser(req.body);
+      const newUser = await usersService.addUser(req.body);
 
       res
         .status(200)
         .type('json')
-        .json(User.toResponse(user));
+        .json(User.toResponse(newUser));
     })
   );
 
 router
-  .route('/:userId')
+  .route('/:userId', validator('params', schemas.userId))
   .get(
     errorsCatcher(async (req, res) => {
       const user = await usersService.getUser(req.params.userId);
@@ -46,6 +49,7 @@ router
     })
   )
   .put(
+    validator('body', schemas.user),
     errorsCatcher(async (req, res) => {
       const user = await usersService.updateUser(req.params.userId, req.body);
 

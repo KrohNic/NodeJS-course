@@ -14,4 +14,9 @@ const schema = new Schema(
   { versionKey: false }
 );
 
+schema.statics.toResponse = obj => {
+  const { id, title, order, description, userId, boardId, columnId } = obj;
+  return { id, title, order, description, userId, boardId, columnId };
+};
+
 module.exports = model('Task', schema);

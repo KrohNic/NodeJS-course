@@ -11,14 +11,14 @@ const updateUser = (userId, userDto) => {
 
   return user;
 };
-const deleteUser = userId => {
-  const isFounded = usersRepo.deleteUser(userId);
+const deleteUser = async userId => {
+  const isFounded = await usersRepo.deleteUser(userId);
 
   if (!isFounded) {
     throw new Error(`Deletion failed. User ${userId} not found. `);
   }
 
-  tasksService.unassignUserTasks(userId);
+  await tasksService.unassignUserTasks(userId);
 };
 
 module.exports = { getAll, getUser, addUser, updateUser, deleteUser };

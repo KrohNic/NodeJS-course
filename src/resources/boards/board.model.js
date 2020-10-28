@@ -25,4 +25,9 @@ const schema = new Schema(
   { versionKey: false }
 );
 
+schema.statics.toResponse = obj => {
+  const { id, title, order, columns } = obj;
+  return { id, title, order, columns };
+};
+
 module.exports = model('Board', schema);

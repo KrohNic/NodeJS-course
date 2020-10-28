@@ -1,19 +1,32 @@
-const tasksRepo = require('./task.memory.repository');
+const tasksRepo = require('./task.db.repository');
 
 const getAll = boardId => tasksRepo.getAll(boardId);
-const getBy = id => tasksRepo.getBy(id);
-const add = (...args) => tasksRepo.add(...args);
-const update = (...args) => tasksRepo.update(...args);
-const remove = id => tasksRepo.remove(id);
-const removeBoardTasks = boardId => tasksRepo.removeBoardTasks(boardId);
-const unassignUserTasks = userId => tasksRepo.unassignUserTasks(userId);
+const add = (boardId, dto) => tasksRepo.add({ ...dto, boardId });
+const getById = taskId => tasksRepo.getById(taskId);
+const update = (taskId, boardId, dto) => {
+  const task = tasksRepo.update(taskId, { ...dto, boardId });
+
+  if (!task) throw new Error(`Updating failed. Task ${taskId} not found. `);
+
+  return task;
+};
+const remove = taskId => {
+  const isFounded = tasksRepo.remove(taskId);
+
+  if (!isFounded) {
+    throw new Error(`Deletion failed. Task ${taskId} not found. `);
+  }
+};
+const removeBoardsTasks = boardId => tasksRepo.removeByKey({ boardId });
+const unassignUserTasks = userId =>
+  tasksRepo.updateByKey({ userId }, { userId: null });
 
 module.exports = {
   getAll,
-  getBy,
+  getById,
   add,
   update,
   remove,
-  removeBoardTasks,
+  removeBoardsTasks,
   unassignUserTasks
 };

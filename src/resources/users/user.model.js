@@ -1,22 +1,19 @@
 const uuid = require('uuid');
+const { Schema, model } = require('mongoose');
 
-class User {
-  constructor({
-    id = uuid(),
-    name = 'USER',
-    login = 'user',
-    password = 'P@55w0rd'
-  } = {}) {
-    this.id = id;
-    this.name = name;
-    this.login = login;
-    this.password = password;
-  }
+const schema = new Schema(
+  {
+    _id: { type: String, default: uuid },
+    name: { type: String, default: 'USER' },
+    login: { type: String, default: 'user' },
+    password: { type: String, default: 'P@55w0rd' }
+  },
+  { versionKey: false }
+);
 
-  static toResponse(user) {
-    const { id, name, login } = user;
-    return { id, name, login };
-  }
-}
+schema.statics.toResponse = user => {
+  const { id, name, login } = user;
+  return { id, name, login };
+};
 
-module.exports = User;
+module.exports = model('User', schema);

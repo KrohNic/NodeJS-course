@@ -1,9 +1,24 @@
-const usersRepo = require('./user.memory.repository');
+const usersRepo = require('./user.db.repository');
+const tasksService = require('../tasks/task.service');
 
 const getAll = () => usersRepo.getAll();
+const addUser = dto => usersRepo.addUser(dto);
 const getUser = id => usersRepo.getUser(id);
-const addUser = (...args) => usersRepo.addUser(...args);
-const updateUser = (...args) => usersRepo.updateUser(...args);
-const deleteUser = id => usersRepo.deleteUser(id);
+const updateUser = (userId, userDto) => {
+  const user = usersRepo.updateUser(userId, userDto);
+
+  if (!user) throw new Error(`Updating failed. User ${userId} not found. `);
+
+  return user;
+};
+const deleteUser = userId => {
+  const isFounded = usersRepo.deleteUser(userId);
+
+  if (!isFounded) {
+    throw new Error(`Deletion failed. User ${userId} not found. `);
+  }
+
+  tasksService.unassignUserTasks(userId);
+};
 
 module.exports = { getAll, getUser, addUser, updateUser, deleteUser };

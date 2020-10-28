@@ -1,23 +1,17 @@
 const uuid = require('uuid');
+const { Schema, model } = require('mongoose');
 
-class Task {
-  constructor({
-    id = uuid(),
-    title = 'TASK',
-    order = 0,
-    description = 'DESCRIPTION',
-    userId = null,
-    boardId = null,
-    columnId = null
-  } = {}) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-    this.description = description;
-    this.userId = userId;
-    this.boardId = boardId;
-    this.columnId = columnId;
-  }
-}
+const schema = new Schema(
+  {
+    _id: { type: String, default: uuid },
+    title: { type: String, default: 'TASK' },
+    order: { type: Number, default: 0 },
+    description: { type: String, default: 'DESCRIPTION' },
+    userId: { type: String, default: null },
+    boardId: { type: String, default: null },
+    columnId: { type: String, default: null }
+  },
+  { versionKey: false }
+);
 
-module.exports = Task;
+module.exports = model('Task', schema);

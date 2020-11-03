@@ -20,7 +20,7 @@ const remove = async boardId => {
     throw new Error(`Deletion failed. Board ${boardId} not found. `);
   }
 
-  await tasksService.removeBoardsTasks(boardId);
+  return tasksService.removeBoardsTasks(boardId);
 };
 
 module.exports = { getAll, getById, add, update, remove };

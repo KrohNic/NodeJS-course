@@ -18,7 +18,7 @@ const deleteUser = async userId => {
     throw new Error(`Deletion failed. User ${userId} not found. `);
   }
 
-  await tasksService.unassignUserTasks(userId);
+  return tasksService.unassignUserTasks(userId);
 };
 
 module.exports = { getAll, getUser, addUser, updateUser, deleteUser };

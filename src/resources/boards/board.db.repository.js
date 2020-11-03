@@ -1,10 +1,9 @@
 const Board = require('./board.model');
 
-const getAll = async () => await Board.find({});
-const getById = async boardId => await Board.findById(boardId);
-const add = async board => await Board.create(board);
-const update = async (boardId, dto) =>
-  await Board.updateOne({ _id: boardId }, dto);
+const getAll = () => Board.find({});
+const getById = boardId => Board.findById(boardId);
+const add = board => Board.create(board);
+const update = (boardId, dto) => Board.updateOne({ _id: boardId }, dto);
 const remove = async boardId =>
   (await Board.deleteOne({ _id: boardId })).deletedCount;
 

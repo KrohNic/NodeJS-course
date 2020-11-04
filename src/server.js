@@ -1,11 +1,4 @@
-const {
-  catchUncaughtException,
-  catchUnhandledRejection
-} = require('./common/errorHandler');
-
-process.on('uncaughtException', catchUncaughtException);
-process.on('unhandledRejection', catchUnhandledRejection);
-
+require('./common/uncathedCather');
 const { PORT, MONGO_CONNECTION_STRING } = require('./common/config');
 const app = require('./app');
 const mongoose = require('mongoose');

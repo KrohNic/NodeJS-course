@@ -16,4 +16,15 @@ schema.statics.toResponse = user => {
   return { id, name, login };
 };
 
+const bcrypt = require('bcrypt');
+const SALT_ROUNDS = 10;
+
+schema.pre('save', async function cb(next) {
+  const salt = await bcrypt.genSalt(SALT_ROUNDS);
+  const hash = await bcrypt.hash(this.password, salt);
+
+  this.password = hash;
+  next();
+});
+
 module.exports = model('User', schema);

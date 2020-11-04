@@ -6,5 +6,6 @@ const addUser = user => User.create(user);
 const updateUser = (userId, userDto) =>
   User.updateOne({ _id: userId }, userDto);
 const deleteUser = async id => (await User.deleteOne({ _id: id })).deletedCount;
+const getByKey = key => User.findOne(key);
 
-module.exports = { getAll, getUser, addUser, updateUser, deleteUser };
+module.exports = { getAll, getUser, addUser, updateUser, deleteUser, getByKey };

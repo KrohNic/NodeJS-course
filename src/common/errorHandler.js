@@ -4,11 +4,11 @@ const errorHandler = (error, req, res, next) => {
   res.status(500).send('Something broke...');
 };
 
-const errorsCatcher = callback => {
+const errorsCatcher = callback => (req, res, next) => {
   try {
-    return callback;
+    return callback(req, res, next);
   } catch (e) {
-    console.log('catch: ', e);
+    console.log('Exception cached: ', e);
   }
 };
 

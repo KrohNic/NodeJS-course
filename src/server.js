@@ -1,3 +1,11 @@
+const {
+  catchUncaughtException,
+  catchUnhandledRejection
+} = require('./common/errorHandler');
+
+process.on('uncaughtException', catchUncaughtException);
+process.on('unhandledRejection', catchUnhandledRejection);
+
 const { PORT, MONGO_CONNECTION_STRING } = require('./common/config');
 const app = require('./app');
 const mongoose = require('mongoose');
@@ -14,7 +22,7 @@ db.on('error', () => console.error('db connection error: ')).once(
   'open',
   () => {
     console.log('db connected');
-    db.dropDatabase();
+    // db.dropDatabase();
 
     app.listen(PORT, () =>
       console.log(`App is running on http://localhost:${PORT}`)

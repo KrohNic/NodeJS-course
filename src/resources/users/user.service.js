@@ -20,5 +20,6 @@ const deleteUser = async userId => {
 
   return tasksService.unassignUserTasks(userId);
 };
+const getByKey = key => usersRepo.getByKey(key);
 
-module.exports = { getAll, getUser, addUser, updateUser, deleteUser };
+module.exports = { getAll, getUser, addUser, updateUser, deleteUser, getByKey };
